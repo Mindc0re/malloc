@@ -1,51 +1,61 @@
 #include "malloc.h"
 
-int init_zones()
+int initZones()
 {
 	if (!zones)
 	{
-		printf("NO ZONE !\n");
-		zones = (t_prealloc *)mmap(0, sizeof(t_prealloc), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-		if (!pushback_mem(zones->tiny))
+		zones = (t_zones *)mmap(0, sizeof(t_zones), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+		if (!zones)
+			return 0;
+		if (!pushbackMem(TINY))
 		{
-			printf("failed tiny\n");
+			printf("Failed tiny\n");
 			return 0;
 		}
-		if (!pushback_mem(zones->small))
+		if (!pushbackMem(SMALL))
 		{
-			printf("failed small\n");
+			printf("Failed small\n");
 			return 0;
 		}
+		printf("Zones successfully created !\n");
 		return 1;
 	}
+	printf("\nZones already exist\n");
 	return 1;
 }
 
-int pushback_mem(t_mem *zone)
+int pushbackMem(int type)
 {
-	t_mem *tmp_l;
-	t_mem *new;
+//	t_map *tmp_l;
+//	t_map *new;
 
-	new = NULL;
-	tmp_l = zone;
-	if (!zone)
+//	new = NULL;
+//	tmp_l = zone;
+	t_map *targetZone = type == TINY ? zones->tiny : zones->small;
+	if (!targetZone)
 	{
-		if (!(zone = (t_mem *)mmap(0, sizeof(t_mem), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)))
-			return 0;
-		zone->prev = NULL;
-		zone->next = NULL;
-		zone->mem = mmap(0, TINY_ZONE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+		printf("Creating new %s zone\n", type == TINY ? "TINY" : "SMALL");
+		if (!(targetZone = (t_map *)mmap(0, sizeof(t_map), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)))
+			return (0);
+		if (!(targetZone->mem = mmap(0, type == TINY ? TINY_ZONE : SMALL_ZONE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)))
+			return (0);
+		targetZone->availableSpace = type == TINY ? TINY_ZONE : SMALL_ZONE;
+		targetZone->type = type;
+		targetZone->firstHead = NULL;
+		targetZone->next = NULL;
 	}
 	else
 	{
-		if (!(new = (t_mem *)mmap(0, sizeof(t_mem), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)))
-			return 0;
-		new->next = NULL;
-		new->mem = mmap(0, TINY_ZONE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-		while (tmp_l->next)
-			tmp_l = tmp_l->next;
-		new->prev = tmp_l;
-		tmp_l->next = new;
+		// if (!(new = (t_map *)mmap(0, sizeof(t_map), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)))
+		// 	return (0);
+		// new->next = NULL;
+		// new->mem = mmap(0, TINY_ZONE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+		// while (tmp_l->next)
+		// 	tmp_l = tmp_l->next;
+		// new->prev = tmp_l;
+		// tmp_l->next = new;
+		printf("Pushback already done\n");
+		return (0);
 	}
-	return 1;
+	return (1);
 }

@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 
+# define TINY_ALLOC 1024
+# define SMALL_ALLOC 1024 * 100
 # define TINY_ZONE 1024 * 100
 # define SMALL_ZONE TINY_ZONE * 100
 
@@ -15,34 +17,36 @@ enum zoneType
 	TINY,
 	SMALL,
 	LARGE
-}
+};
 
 typedef struct 		s_head
 {
-	size_t			size;
-	size_t			spaceBeforeNext;
-	void			*mem;
-	struct s_mem	*next;
+	size_t			size; // size of the alloc contained here
+	size_t			spaceBeforeNext; // if at -1, there is no next
+	void			*mem; // pointer returned to the user
+	struct s_mem	*next; // pointer to next header
 }					t_head;
 
 typedef struct 		s_map
 {
-	size_t			available_space;
-	zoneType		type;
-	s_head			*next;
+	size_t			availableSpace; // space left in the zone, calculated at each alloc
+	int				type; // type of the zone (enum zoneType)
+	t_head			*firstHead; // pointer to the first alloc's header
+	void			*mem; // pointer to the zone's memory
+	struct s_map	*next; // pointer to the next zone 
 }					t_map;
 
 typedef struct 		s_zones
 {
-	t_map			tiny;
-	t_map			small;
-	t_map			large;
+	t_map			*tiny;
+	t_map			*small;
+	t_map			*large;
 }					t_zones;
 
 t_zones 			*zones;
 
 int					init_zones();
-int 				pushback_mem(t_mem *zone);
+int 				pushback_mem(int type);
 
 
 #endif

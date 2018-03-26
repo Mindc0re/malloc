@@ -1,33 +1,29 @@
 #include "malloc.h"
 
+void createNewStdAlloc(size_t size, t_map *zone)
+{
+
+}
+
 void *ft_malloc(size_t size)
 {
-	if (size <= 0 || !init_zones())
+	if (size <= 0 || !initZones())
 		return (NULL);
 
-	t_head *head = mmap(0, sizeof(t_head), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-	if (!head)
-		return NULL;
-	head->size = size;
-
-	void *mem = mmap(head + sizeof(t_head), size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-	if (mem == (void *) -1)
-		return NULL;
-
-	printf("Head address = %p\n", head);
-	printf("Mem address in malloc = %p\n", mem);
-	printf("size stocked in malloc : %d\n", (int)head->size);
-
-	return mem;
+	if (size <= )
+		createNewStdAlloc(size, size <= TINY_ZONE ? zones->tiny : zones->small);
+	return NULL;
 }
 
 int main()
 {
 	char *str = NULL;
+	char *str2 = NULL;
 
 	str = ft_malloc(10);
-	if (str == NULL)
-		printf("NULL\n");
+	str2 = ft_malloc(1);
+//	if (str == NULL)
+//		printf("NULL\n");
 
 	return 0;
 }
