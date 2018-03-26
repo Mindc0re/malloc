@@ -11,6 +11,7 @@
 # define SMALL_ALLOC 1024 * 100
 # define TINY_ZONE 1024 * 100
 # define SMALL_ZONE TINY_ZONE * 100
+# define HEAD_SIZE sizeof(t_head)
 
 enum zoneType
 {
@@ -24,7 +25,7 @@ typedef struct 		s_head
 	size_t			size; // size of the alloc contained here
 	size_t			spaceBeforeNext; // if at -1, there is no next
 	void			*mem; // pointer returned to the user
-	struct s_mem	*next; // pointer to next header
+	struct s_head	*next; // pointer to next header
 }					t_head;
 
 typedef struct 		s_map
@@ -45,8 +46,8 @@ typedef struct 		s_zones
 
 t_zones 			*zones;
 
-int					init_zones();
-int 				pushback_mem(int type);
-
+int					initZones();
+int 				pushbackMem(int type, t_map **targetZone);
+int					calculateSpaceLeft(t_map *zone);
 
 #endif
