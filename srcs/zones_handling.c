@@ -28,8 +28,8 @@ int initZones()
 
 int pushbackMem(int type, t_map **targetZone)
 {
-//	t_map *tmp_l;
-//	t_map *new;
+	t_map *tmp;
+	t_map *new;
 
 //	new = NULL;
 //	tmp_l = zone;
@@ -48,16 +48,21 @@ int pushbackMem(int type, t_map **targetZone)
 	}
 	else
 	{
-		// if (!(new = (t_map *)mmap(0, sizeof(t_map), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)))
-		// 	return (0);
-		// new->next = NULL;
-		// new->mem = mmap(0, TINY_ZONE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-		// while (tmp_l->next)
-		// 	tmp_l = tmp_l->next;
-		// new->prev = tmp_l;
-		// tmp_l->next = new;
-		printf("Pushback already done\n");
-		return (0);
+		tmp = (*targetZone);
+		while (tmp->next)
+			tmp = tmp->next;
+
+		if ((new = (t_map *)mmap(0, sizeof(t_map), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *)-1)
+			return (0);
+		if ((new->mem = mmap(0, type == TINY ? TINY_ZONE : SMALL_ZONE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *)-1)
+			return (0);
+		new->availableSpace = type == TINY ? TINY_ZONE : SMALL_ZONE;
+		new->type = type;
+		new->firstHead = NULL;
+		new->next = NULL;
+
+		tmp->next = new;
+		printf("Pushback new memory\n");
 	}
 	return (1);
 }

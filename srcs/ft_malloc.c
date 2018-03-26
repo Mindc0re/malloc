@@ -24,6 +24,13 @@ void *createNewStdAlloc(size_t size, t_map *zone)
 				break ;
 			tmp = tmp->next;
 		}
+
+		if (tmp->spaceBeforeNext < size + HEAD_SIZE)
+		{
+			printf("No memory found in this zone :/\n");
+			return NULL;
+		}
+
 		new = tmp->mem + tmp->size;
 		new->size = size;
 		new->spaceBeforeNext = tmp->next ? ((void *)tmp->next - (tmp->mem + tmp->size)) - (HEAD_SIZE + size) : (tmp->spaceBeforeNext - (HEAD_SIZE + size));
@@ -44,26 +51,38 @@ void *createNewStdAlloc(size_t size, t_map *zone)
 
 void *ft_malloc(size_t size)
 {
+	void 		*retNewStdAlloc;
+	t_map 		*zone;
+
 	if (size <= 0 || !initZones())
 		return (NULL);
 
+	zone = size <= TINY_ALLOC ? zones->tiny : zones->small;
+	retNewStdAlloc = NULL;
 	if (size <= SMALL_ALLOC)
-		return createNewStdAlloc(size, size <= TINY_ALLOC ? zones->tiny : zones->small);
-	return NULL;
+		retNewStdAlloc = zoneParser(zone, size);
+	return retNewStdAlloc;
 }
 
 int main()
 {
+	int totalMemoryDistributed = 0;
 	char *str = NULL;
 	char *str2 = NULL;
 	char *str3 = NULL;
+	// char *str4 = NULL;
 
-	str = ft_malloc(10);
-	str[0] = 'c';
-	printf("str address : %p\n", str);
-	printf("str[0] = %c\n", str[0]);
+	while (totalMemoryDistributed <= TINY_ZONE)
+	{
+		str = ft_malloc(TINY_ALLOC);
+		// str[0] = 'c';
+		// printf("str address : %p\n", str);
+		// printf("str[0] = %c\n", str[0]);
 
-	str2 = ft_malloc(1025);
+		totalMemoryDistributed += (1024 + HEAD_SIZE);
+	}
+
+	str2 = ft_malloc(4);
 	str2[0] = 's';
 	printf("str2 address : %p\n", str2);
 	printf("str2[0] = %c\n", str2[0]);

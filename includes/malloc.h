@@ -49,5 +49,7 @@ t_zones 			*zones;
 int					initZones();
 int 				pushbackMem(int type, t_map **targetZone);
 int					calculateSpaceLeft(t_map *zone);
+t_map 				*zoneParser(t_map *zone, size_t size);
+void 				*createNewStdAlloc(size_t size, t_map *zone);
 
 #endif
