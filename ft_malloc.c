@@ -5,6 +5,7 @@ void *createNewStdAlloc(size_t size, t_map *zone)
 	t_head	*tmp;
 	t_head	*new;
 
+	printf("This is a %s zone\n", zone->type == TINY ? "TINY" : "SMALL");
 	if (!zone->firstHead)
 	{
 		zone->firstHead = zone->mem;
@@ -31,12 +32,12 @@ void *createNewStdAlloc(size_t size, t_map *zone)
 		tmp->next = new;
 		tmp->spaceBeforeNext = 0;
 	}
-//	printf("size left in new = %zu\n", new->spaceBeforeNext);
+	printf("size left in new = %zu\n", new->spaceBeforeNext);
 	zone->availableSpace = calculateSpaceLeft(zone);
 //	printf("Available space left in zone = %zu\n", zone->availableSpace);
 
-	// printf("First header address : %p\n", new);
-	// printf("First alloc address : %p\n", new->mem);
+	printf("Header address : %p\n", new);
+	printf("Alloc address : %p\n", new->mem);
 	// printf("size left in new = %zu\n", new->spaceBeforeNext);
 	return new->mem;
 }
@@ -55,15 +56,21 @@ int main()
 {
 	char *str = NULL;
 	char *str2 = NULL;
+	char *str3 = NULL;
 
 	str = ft_malloc(10);
 	str[0] = 'c';
 	printf("str address : %p\n", str);
 	printf("str[0] = %c\n", str[0]);
 
-	str2 = ft_malloc(10);
+	str2 = ft_malloc(1025);
 	str2[0] = 's';
 	printf("str2 address : %p\n", str2);
 	printf("str2[0] = %c\n", str2[0]);
+
+	str3 = ft_malloc(10);
+	str3[0] = 's';
+	printf("str3 address : %p\n", str3);
+	printf("str3[0] = %c\n", str3[0]);
 	return 0;
 }

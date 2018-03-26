@@ -9,8 +9,8 @@
 
 # define TINY_ALLOC 1024
 # define SMALL_ALLOC 1024 * 100
-# define TINY_ZONE 1024 * 100
-# define SMALL_ZONE TINY_ZONE * 100
+# define TINY_ZONE TINY_ALLOC * 100
+# define SMALL_ZONE SMALL_ALLOC * 100
 # define HEAD_SIZE sizeof(t_head)
 
 enum zoneType
