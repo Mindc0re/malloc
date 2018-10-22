@@ -5,12 +5,12 @@
 # include <sys/mman.h>
 # include <stdlib.h>
 
-#include <stdio.h>
+# include <stdio.h>
 
 # define TINY_ALLOC 1024
 # define SMALL_ALLOC 1024 * 100
-# define TINY_ZONE TINY_ALLOC * 100
-# define SMALL_ZONE SMALL_ALLOC * 100
+# define TINY_ZONE TINY_ALLOC * 104
+# define SMALL_ZONE SMALL_ALLOC * 104
 # define HEAD_SIZE sizeof(t_head)
 
 enum zoneType
@@ -22,19 +22,19 @@ enum zoneType
 
 typedef struct 		s_head
 {
-	size_t			size; // size of the alloc contained here
-	size_t			spaceBeforeNext; // if at -1, there is no next
-	void			*mem; // pointer returned to the user
-	struct s_head	*next; // pointer to next header
+	size_t			size;
+	size_t			spaceBeforeNext;
+	void			*mem;
+	struct s_head	*next;
 }					t_head;
 
 typedef struct 		s_map
 {
-	size_t			availableSpace; // space left in the zone, calculated at each alloc
-	int				type; // type of the zone (enum zoneType)
-	t_head			*firstHead; // pointer to the first alloc's header
-	void			*mem; // pointer to the zone's memory
-	struct s_map	*next; // pointer to the next zone 
+	size_t			availableSpace;
+	int				type;
+	t_head			*firstHead;
+	void			*mem;
+	struct s_map	*next;
 }					t_map;
 
 typedef struct 		s_zones
@@ -46,10 +46,13 @@ typedef struct 		s_zones
 
 t_zones 			*zones;
 
+void 				*ft_malloc(size_t size);
+void				show_alloc_mem();
+
 int					initZones();
 int 				pushbackMem(int type, t_map **targetZone);
 int					calculateSpaceLeft(t_map *zone);
-t_map 				*zoneParser(t_map *zone, size_t size);
+void 				*zoneParser(t_map *zone, size_t size);
 void 				*createNewStdAlloc(size_t size, t_map *zone);
 
 #endif

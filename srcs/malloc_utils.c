@@ -21,8 +21,7 @@ int		calculateSpaceLeft(t_map *zone)
 	return (zoneSize - (headCount * HEAD_SIZE) - totalSize);
 }
 
-// May change t_map *zone type to it's address
-t_map 	*zoneParser(t_map *zone, size_t size)
+void 	*zoneParser(t_map *zone, size_t size)
 {
 	void 		*retNewStdAlloc;
 	while (zone->next)
@@ -36,10 +35,7 @@ t_map 	*zoneParser(t_map *zone, size_t size)
 		zone = zone->next;
 	}
 	if (!pushbackMem(zone->type, &zone))
-	{
-		printf("pushbackMem failed !");
 		return NULL;
-	}
 	else
 		return (zoneParser(zone, size));
 }
