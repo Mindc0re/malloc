@@ -28,7 +28,7 @@ void 	*zoneParser(t_map *zone, size_t size)
 	{
 		if (zone->availableSpace > size + HEAD_SIZE)
 		{
-			retNewStdAlloc = findFreeAlloc(size, zone);
+			retNewStdAlloc = findFreeAlloc(size, zone); // TODO : If findFreeAlloc doesnt find, pushback a new zone
 			if (retNewStdAlloc)
 				return retNewStdAlloc;
 		}

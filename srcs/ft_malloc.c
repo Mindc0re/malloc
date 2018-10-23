@@ -1,5 +1,14 @@
 #include "malloc.h"
 
+// void splitHeadOnNewAlloc(t_head *newlyAllocated)
+// {
+
+// }
+
+
+// TODO : Optimiser ca pour que ca trouve une alloc FREE
+// TODO : Il faut aussi etre sur que le tmp dans le else peut bien contenir l'alloc demandee
+// TODO : Coder la fonction au dessus
 void *findFreeAlloc(size_t size, t_map *zone)
 {
 	t_head	*tmp;
