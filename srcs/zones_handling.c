@@ -18,30 +18,37 @@ int initZones()
 	return 1;
 }
 
+int allocMem(int type, t_map **toAlloc)
+{
+	if (((*toAlloc) = (t_map *)mmap(0, sizeof(t_map), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *)-1)
+		return (0);
+	if (((*toAlloc)->mem = mmap(0, type == TINY ? TINY_ZONE : SMALL_ZONE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *)-1)
+		return (0);
+	(*toAlloc)->availableSpace = type == TINY ? TINY_ZONE : SMALL_ZONE;
+	(*toAlloc)->type = type;
+	(*toAlloc)->firstHead = NULL;
+	(*toAlloc)->next = NULL;
+	return (1);
+}
+
 int pushbackMem(int type, t_map **targetZone)
 {
 	t_map *tmp;
 	t_map *new;
 
-	tmp = NULL;
 	if (!(*targetZone))
-		new = *targetZone;
+	{
+		if (!allocMem(type, targetZone))
+			return (0);
+	}
 	else
 	{
-		tmp = *targetZone;
+		tmp = (*targetZone);
 		while (tmp->next)
 			tmp = tmp->next;
-	}
-	if ((new = (t_map *)mmap(0, sizeof(t_map), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *)-1)
-		return (0);
-	if ((new->mem = mmap(0, type == TINY ? TINY_ZONE : SMALL_ZONE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0)) == (void *)-1)
-		return (0);	
-	new->availableSpace = type == TINY ? TINY_ZONE : SMALL_ZONE;
-	new->type = type;
-	new->firstHead = NULL;
-	new->next = NULL;
-	if (tmp)
+		if (!allocMem(type, &new))
+			return (0);
 		tmp->next = new;
-
+	}
 	return (1);
 }
