@@ -28,13 +28,13 @@ void 	*zoneParser(t_map *zone, size_t size)
 	{
 		if (zone->availableSpace > size + HEAD_SIZE)
 		{
-			retNewStdAlloc = createNewStdAlloc(size, zone);
+			retNewStdAlloc = findFreeAlloc(size, zone);
 			if (retNewStdAlloc)
 				return retNewStdAlloc;
 		}
 		zone = zone->next;
 	}
-	if (!pushbackMem(zone->type, &zone))
+	if (!pushbackMem(0, zone->type, &zone))
 		return NULL;
 	else
 		return (zoneParser(zone, size));

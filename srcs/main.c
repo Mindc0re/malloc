@@ -7,9 +7,9 @@ int main()
 	// char *str = NULL;
 	char *str2 = NULL;
 	char *str3 = NULL;
+	char *str4 = NULL;
 
 	show_alloc_mem();
-	// char *str4 = NULL;
 
 	// while (totalMemoryDistributed <= TINY_ZONE)
 	// {
@@ -30,8 +30,8 @@ int main()
 	str2[2] = 'r';
 	str2[3] = '\0';
 	// printf("str2 = %s\n", str2);
-
 	show_alloc_mem();
+	printf("\n");
 
 	str3 = ft_malloc(10);
 	str3[0] = '1';
@@ -39,8 +39,15 @@ int main()
 	str3[2] = '3';
 	str3[3] = '\0';
 	// printf("str3 = %s\n", str3);
-
 	show_alloc_mem();
+	printf("\n");
+
+	str4 = ft_malloc(SMALL_ALLOC + 1);
+	str4 = ft_malloc(SMALL_ALLOC + 1);
+	str4[0] = 'h';
+	str4[1] = '\0';
+	show_alloc_mem();
+	printf("\n");	
 
 	return 0;
 }

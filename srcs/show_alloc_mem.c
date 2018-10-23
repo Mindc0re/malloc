@@ -22,17 +22,17 @@ void	show_alloc_mem()
 
 	tmp = NULL;
 	total = 0;
-	if (!zones)
+	if (!g_zones)
 		return ;
-	tmp = zones->tiny ? zones->tiny->firstHead : NULL;
+	tmp = g_zones->tiny ? g_zones->tiny->firstHead : NULL;
 	if (tmp)
 		total += print_mem(tmp, "TINY");
 
-	tmp = zones->small ? zones->small->firstHead : NULL;
+	tmp = g_zones->small ? g_zones->small->firstHead : NULL;
 	if (tmp)
 		total += print_mem(tmp, "SMALL");
 
-	tmp = zones->large ? zones->large->firstHead : NULL;
+	tmp = g_zones->large ? g_zones->large->firstHead : NULL;
 	if (tmp)
 		total += print_mem(tmp, "LARGE");
 
