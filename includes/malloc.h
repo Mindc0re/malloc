@@ -61,6 +61,6 @@ void				*allocLargeZone(size_t size);
 int 				pushbackMem(size_t size, int type, t_map **targetZone);
 int					calculateSpaceLeft(t_map *zone);
 void 				*zoneParser(t_map *zone, size_t size);
-void 				*findFreeAlloc(size_t size, t_map *zone);
+void 				*findAlloc(size_t size, t_map *zone);
 
 #endif
