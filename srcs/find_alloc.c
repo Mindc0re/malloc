@@ -56,7 +56,6 @@ t_head *initFirstHead(size_t size, t_map *zone)
 	return (zone->firstHead);
 }
 
-// TODO : Checker le available space de la zone avant de tout parcourir comme des idiots
 void *findAlloc(size_t size, t_map *zone)
 {
 	t_head	*new;

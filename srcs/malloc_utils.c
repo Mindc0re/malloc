@@ -23,7 +23,7 @@ int		calculateSpaceLeft(t_map *zone)
 void 	*zoneParser(t_map *zone, size_t size)
 {
 	void 		*retNewStdAlloc;
-	while (zone->next) // Peut etre pb avec ca : zone->next = NULL sur la premiere zone ?
+	while (zone->next)
 	{
 		if (zone->availableSpace > size + HEAD_SIZE)
 		{
