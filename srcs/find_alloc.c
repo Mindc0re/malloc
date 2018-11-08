@@ -63,7 +63,7 @@ void *findAlloc(size_t size, t_map *zone)
 	if (size > zone->availableSpace)
 		return (NULL);
 	if (!zone->firstHead)
-		initFirstHead(size, zone);
+		new = initFirstHead(size, zone);
 	else
 	{
 		new = findFreeBlock(size, zone);

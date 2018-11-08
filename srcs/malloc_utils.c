@@ -23,14 +23,17 @@ int		calculateSpaceLeft(t_map *zone)
 void 	*zoneParser(t_map *zone, size_t size)
 {
 	void 		*retNewStdAlloc;
-	while (zone->next)
+
+	while (zone)
 	{
 		if (zone->availableSpace > size + HEAD_SIZE)
 		{
-			retNewStdAlloc = findAlloc(size, zone); // TODO : If findFreeAlloc doesnt find, pushback a new zone
+			retNewStdAlloc = findAlloc(size, zone);
 			if (retNewStdAlloc)
 				return retNewStdAlloc;
 		}
+		if (!zone->next)
+			break ;
 		zone = zone->next;
 	}
 	if (!pushbackMem(0, zone->type, &zone))
