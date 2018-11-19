@@ -54,6 +54,7 @@ typedef struct 		s_zones
 t_zones 			*g_zones;
 
 void 				*ft_malloc(size_t size);
+void				ft_free(void *ptr);
 void				show_alloc_mem();
 
 int					initZones(void);

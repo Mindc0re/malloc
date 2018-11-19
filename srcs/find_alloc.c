@@ -1,5 +1,12 @@
 #include "malloc.h"
 
+
+// Si on alloue une alloc plus petite que le block, il faut que FindFreeSpace
+// puisse lier les maillons entre eux correctement.
+// Ex. : On alloue 100 dans un FREE de 1000, donc quand on alloue juste derriere ce block (dans l'espace restant de 900),
+// il faut que le next du block de 100 (ancien 1000)
+// soit maintenant la nouvelle alloc qu'on vient de faire, et que le next de la nouvelle alloc soit l'ancien next du nouveau block de 100.
+// A TESTER
 t_head *findFreeBlock(size_t size, t_map *zone)
 {
 	t_head *tmp;

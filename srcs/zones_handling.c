@@ -9,6 +9,7 @@ int 	initZones(void)
 			return (0);
 		g_zones->tiny = NULL;
 		g_zones->small = NULL;
+		g_zones->large = NULL;
 		if (!pushbackMem(0, TINY, &g_zones->tiny))
 			return (0);
 		if (!pushbackMem(0, SMALL, &g_zones->small))

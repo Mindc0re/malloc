@@ -15,6 +15,7 @@ int		print_mem(t_head *tmp, char *type)
 	return total;
 }
 
+// Parcourir toutes les zones (si plusieurs zones du meme type allouee)
 void	show_alloc_mem()
 {
 	t_head *tmp;

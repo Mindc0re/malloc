@@ -1,5 +1,6 @@
 #include "malloc.h"
 
+// TODO : Checker getrlimit() pour limiter l'appel a malloc si trop de memoire a ete allouee
 void *ft_malloc(size_t size)
 {
 	void 		*alloc;
