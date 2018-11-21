@@ -23,21 +23,23 @@ int		calculateSpaceLeft(t_map *zone)
 void 	*zoneParser(t_map *zone, size_t size)
 {
 	void 		*retNewStdAlloc;
+	t_map		*tmp;
 
-	while (zone)
+	tmp = zone;
+	while (tmp)
 	{
-		if (zone->availableSpace > size + HEAD_SIZE)
+		if (tmp->availableSpace > size + HEAD_SIZE)
 		{
-			retNewStdAlloc = findAlloc(size, zone);
+			retNewStdAlloc = findAlloc(size, tmp);
 			if (retNewStdAlloc)
 				return retNewStdAlloc;
 		}
-		if (!zone->next)
+		if (!tmp->next)
 			break ;
-		zone = zone->next;
+		tmp = tmp->next;
 	}
-	if (!pushbackMem(0, zone->type, &zone))
+	if (!pushbackMem(0, tmp->type, &tmp))
 		return NULL;
 	else
-		return (zoneParser(zone, size));
+		return (zoneParser(tmp, size));
 }

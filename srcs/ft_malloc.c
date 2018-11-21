@@ -1,18 +1,28 @@
 #include "malloc.h"
 
+//t_zones	g_zones = {NULL, NULL, NULL};
+
 // TODO : Checker getrlimit() pour limiter l'appel a malloc si trop de memoire a ete allouee
-void *ft_malloc(size_t size)
+void	*ft_malloc(size_t size)
 {
 	void 		*alloc;
-	t_map 		*zone;
 
-	if (size <= 0 || !initZones())
+	if (size <= 0)
 		return (NULL);
+	alloc = NULL;
 	if (size > SMALL_ALLOC)
 		return allocLargeZone(size);
-	zone = size <= TINY_ALLOC ? g_zones->tiny : g_zones->small;
-	alloc = NULL;
-	if (size <= SMALL_ALLOC)
-		alloc = zoneParser(zone, size);
+	else if (size > TINY_ALLOC)
+	{
+		if (!g_zones.small)
+			pushbackMem(0, SMALL, &g_zones.small);
+		alloc = zoneParser(g_zones.small, size);
+	}
+	else if (size <= TINY_ALLOC)
+	{
+		if (!g_zones.tiny)
+			pushbackMem(0, SMALL, &g_zones.tiny);
+		alloc = zoneParser(g_zones.tiny, size);
+	}
 	return alloc;
 }
