@@ -63,5 +63,6 @@ int 				pushbackMem(size_t size, int type, t_map **targetZone);
 int					calculateSpaceLeft(t_map *zone);
 void 				*zoneParser(t_map *zone, size_t size);
 void 				*findAlloc(size_t size, t_map *zone);
+t_map				*which_zone(t_head *ptr_head);
 
 #endif

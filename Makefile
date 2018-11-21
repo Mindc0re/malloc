@@ -20,7 +20,7 @@ COMPILER			=	gcc
 C_FLAGS				=	-Wall -Wextra -Werror
 
 FILES_MALLOC		=	ft_malloc.c malloc_utils.c zones_handling.c show_alloc_mem.c \
-						find_alloc.c ft_free.c main2.c
+						find_alloc.c ft_free.c free_utils.c main.c
 
 SRC_MALLOC			=	$(addprefix $(MALLOC_DIR), $(FILES_MALLOC))
 BIN_MALLOC			= 	$(FILES_MALLOC:.c=.o)

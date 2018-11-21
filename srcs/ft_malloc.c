@@ -21,7 +21,7 @@ void	*ft_malloc(size_t size)
 	else if (size <= TINY_ALLOC)
 	{
 		if (!g_zones.tiny)
-			pushbackMem(0, SMALL, &g_zones.tiny);
+			pushbackMem(0, TINY, &g_zones.tiny);
 		alloc = zoneParser(g_zones.tiny, size);
 	}
 	return alloc;

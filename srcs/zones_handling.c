@@ -1,25 +1,5 @@
 #include "malloc.h"
 
-
-// int 	initZones(void)
-// {
-// 	if (!g_zones)
-// 	{
-// 		g_zones = (t_zones *)mmap(0, sizeof(t_zones), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-// 		if (!g_zones)
-// 			return (0);
-// 		g_zones->tiny = NULL;
-// 		g_zones->small = NULL;
-// 		g_zones->large = NULL;
-// 		if (!pushbackMem(0, TINY, &g_zones->tiny))
-// 			return (0);
-// 		if (!pushbackMem(0, SMALL, &g_zones->small))
-// 			return (0);
-// 		return (1);
-// 	}
-// 	return (1);
-// }
-
 void	*allocLargeZone(size_t size)
 {
 	t_map *tmp;

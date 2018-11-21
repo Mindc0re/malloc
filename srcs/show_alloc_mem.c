@@ -1,15 +1,24 @@
 #include "malloc.h"
 
-int		print_mem(t_head *tmp, char *type)
+int		print_mem(t_map *tmp, char *type)
 {
-	int total;
+	int 	total;
+	t_head *tmp_head;
 
 	total = 0;
-	printf("%s : %p\n", type, tmp);
 	while (tmp)
 	{
-		printf("%p - %p : %zu octets\n", tmp->mem, tmp->mem + tmp->size, tmp->size);
-		total += tmp->size;
+		tmp_head = tmp->firstHead;
+		printf("\n%s : %p\n", type, tmp);
+		while (tmp_head)
+		{
+			if (tmp_head->status == USED)
+			{
+				printf("%p - %p : %zu octets\n", tmp_head->mem, tmp_head->mem + tmp_head->size, tmp_head->size);
+				total += tmp_head->size;
+			}
+			tmp_head = tmp_head->next;
+		}
 		tmp = tmp->next;
 	}
 	return total;
@@ -18,22 +27,21 @@ int		print_mem(t_head *tmp, char *type)
 // Parcourir toutes les zones (si plusieurs zones du meme type allouee)
 void	show_alloc_mem()
 {
-	t_head *tmp;
+	t_map *tmp;
 	int total;
 
 	tmp = NULL;
 	total = 0;
-	tmp = g_zones.tiny ? g_zones.tiny->firstHead : NULL;
+	tmp = g_zones.tiny;
 	if (tmp)
 		total += print_mem(tmp, "TINY");
-
-	tmp = g_zones.small ? g_zones.small->firstHead : NULL;
+	tmp = g_zones.small;
 	if (tmp)
 		total += print_mem(tmp, "SMALL");
 
-	tmp = g_zones.large ? g_zones.large->firstHead : NULL;
+	tmp = g_zones.large;
 	if (tmp)
 		total += print_mem(tmp, "LARGE");
 
-	printf("Total : %d octets\n", total);
+	printf("Total : %d octets\n\n", total);
 }
