@@ -17,5 +17,8 @@ int main(void)
 	printf("str2 = %s\n", str2);
 	show_alloc_mem();
 
+	// ft_free(str2);
+	// show_alloc_mem();
+
 	return 0;
 }

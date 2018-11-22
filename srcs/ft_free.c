@@ -1,11 +1,23 @@
 #include "malloc.h"
 
-// Cette fonction unmap une zone si elle n'a plus lieu d'etre utilisee.
-// C'est a dire : La zone n'a aucun block USED ; Il y a au moins une autre zone du meme type dans laquelle il reste PLUSIEURS blocks FREE
-// Doit-elle unmap une zone si c'est la seule zone creee ? A voir.
+int			is_unused(t_map *zone)
+{
+	t_head *tmp;
 
-// Trouver comment mettre à jour le spaceLeft de la zone dans laquelle on a free le block. Pas opti de reparcourir toutes les zones.
-// On peut peut etre jouer avec les valeurs des adresses et déduire dans quelle zone se trouve ptr_head : "if (ptr_head) < zone + ZONE_LENGTH"
+	if (!zone)
+		return (0);
+	if (zone->type == LARGE)
+		return (1);
+	tmp = zone->firstHead;
+	while (tmp)
+	{
+		if (tmp->status == USED)
+			return (0);
+		tmp = tmp->next;
+	}
+	return (1);
+}
+
 int			unmap_zone(t_map *zone, size_t map_size)
 {
 	t_map	*tmp;
@@ -13,7 +25,7 @@ int			unmap_zone(t_map *zone, size_t map_size)
 	int 	var_de_merde_pour_checker_si_on_free_le_premier_large = 0;
 
 	tmp_next = NULL;
-	if (!zone)
+	if (!zone || !is_unused(zone))
 		return (0);
 	if (zone->type == LARGE)
 		tmp = g_zones.large;
@@ -28,14 +40,11 @@ int			unmap_zone(t_map *zone, size_t map_size)
 	}
 	while (tmp->next != NULL && tmp->next != zone)
 		tmp = tmp->next;
-	tmp->next = zone->next;
-
-	if (tmp == g_zones.large)
+	if (tmp == g_zones.large && tmp->next == NULL)
 		var_de_merde_pour_checker_si_on_free_le_premier_large = 1;
-
+	tmp->next = zone->next;
 	munmap(zone->mem, map_size);
 	munmap(zone, sizeof(zone));
-
 	if (var_de_merde_pour_checker_si_on_free_le_premier_large == 1)
 		g_zones.large = NULL;
 
@@ -69,14 +78,12 @@ int			verif_large_free(t_head *ptr_head)
 	{
 		if (tmp->firstHead == ptr_head)
 			return (unmap_zone(tmp, tmp->firstHead->size));
+		tmp = tmp->next;
 	}
 	return (0);
 }
 
-// Ici, on va passer le block pointé en FREE si cela concerne une zone TINY ou SMALL.
-// Pour une zone LARGE, on va unmap la zone directement.
-// On doit egalement se charger d'optimiser les blocks FREE pour avoir les plus grands blocks possible disponibles.
-// Doit-on remettre à 0 un block FREE ? Ou sa "mem" doit-elle pointer sur NULL ? A voir.
+// TODO : Doit-on remettre à 0 un block FREE ? Ou sa "mem" doit-elle pointer sur NULL ? A voir.
 void		ft_free(void *ptr)
 {
 	t_head	*ptr_head;
@@ -89,6 +96,7 @@ void		ft_free(void *ptr)
 	if (!verif_large_free(ptr_head))
 	{
 		z_ptr = which_zone(ptr_head);
+		z_ptr->availableSpace += ptr_head->size;
 		if (!unmap_zone(z_ptr, z_ptr->type == SMALL ? SMALL_ZONE : TINY_ZONE))
 			optimize_free_blocks(ptr_head);
 	}
