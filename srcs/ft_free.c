@@ -67,22 +67,6 @@ void		optimize_free_blocks(t_head *ptr_head)
 	}
 }
 
-int			verif_large_free(t_head *ptr_head)
-{
-	t_map	*tmp;
-
-	tmp = g_zones.large;
-	if (!tmp)
-		return (0);
-	while (tmp)
-	{
-		if (tmp->firstHead == ptr_head)
-			return (unmap_zone(tmp, tmp->firstHead->size));
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
 // TODO : Doit-on remettre à 0 un block FREE ? Ou sa "mem" doit-elle pointer sur NULL ? A voir.
 void		ft_free(void *ptr)
 {
@@ -92,12 +76,16 @@ void		ft_free(void *ptr)
 	if (!ptr)
 		return ;
 	ptr_head = ptr - HEAD_SIZE;
-	ptr_head->status = FREE;
-	if (!verif_large_free(ptr_head))
+	z_ptr = which_zone(ptr_head);
+	if (!z_ptr)
+		return ;
+	if (z_ptr->type == LARGE)
 	{
-		z_ptr = which_zone(ptr_head);
-		z_ptr->availableSpace += ptr_head->size;
-		if (!unmap_zone(z_ptr, z_ptr->type == SMALL ? SMALL_ZONE : TINY_ZONE))
-			optimize_free_blocks(ptr_head);
+		unmap_zone(z_ptr, z_ptr->firstHead->size);
+		return ;
 	}
+	ptr_head->status = FREE;
+	z_ptr->availableSpace += ptr_head->size;
+	if (!unmap_zone(z_ptr, z_ptr->type == SMALL ? SMALL_ZONE : TINY_ZONE))
+		optimize_free_blocks(ptr_head);
 }

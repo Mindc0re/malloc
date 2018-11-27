@@ -1,17 +1,20 @@
 #include "malloc.h"
 
-// t_map 	*is_large(t_map *zone, t_head *ptr_head)
-// {
-// 	while (zone)
-// 	{
-// 		if (zone->firstHead == ptr_head)
-// 			break ;
-// 		zone = zone->next;
-// 	}
-// 	return (zone);
-// }
+t_map	*is_large(t_head *ptr_head)
+{
+	t_map	*tmp;
 
-// // if (ptr_head) < zone + ZONE_LENGTH
+	tmp = g_zones.large;
+	if (!tmp)
+		return (NULL);
+	while (tmp)
+	{
+		if (tmp->firstHead == ptr_head)
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
 
 t_map	*is_tiny_or_small(t_map *zone, t_head *ptr_head)
 {
@@ -34,9 +37,8 @@ t_map	*which_zone(t_head *ptr_head)
 
 	if (!ptr_head)
 		return (NULL);
-	// tmp = g_zones.large;
-	// if ((ret = is_large(tmp, ptr_head)) != NULL)
-	// 	return (ret);
+	if (g_zones.large && (ret = is_large(ptr_head)) != NULL)
+		return (ret);
 	tmp = g_zones.small;
 	if (tmp && (ret = is_tiny_or_small(tmp, ptr_head)) != NULL)
 		return (ret);

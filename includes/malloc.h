@@ -7,8 +7,8 @@
 
 # include <stdio.h>
 
-# define TINY_ALLOC 1024
-# define SMALL_ALLOC 1024 * 100
+# define TINY_ALLOC (size_t)getpagesize() / 4
+# define SMALL_ALLOC TINY_ALLOC * 20
 # define TINY_ZONE TINY_ALLOC * 104
 # define SMALL_ZONE SMALL_ALLOC * 104
 # define HEAD_SIZE sizeof(t_head)
@@ -55,6 +55,7 @@ t_zones				g_zones;
 
 void 				*ft_malloc(size_t size);
 void				ft_free(void *ptr);
+void				*ft_realloc(void *ptr, size_t size);
 void				show_alloc_mem();
 
 int					initZones(void);
@@ -64,5 +65,8 @@ int					calculateSpaceLeft(t_map *zone);
 void 				*zoneParser(t_map *zone, size_t size);
 void 				*findAlloc(size_t size, t_map *zone);
 t_map				*which_zone(t_head *ptr_head);
+
+void				*ft_memcpy(void *dst, void *src, size_t n);
+
 
 #endif

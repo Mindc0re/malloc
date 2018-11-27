@@ -2,7 +2,7 @@
 
 int main()
 {
-	int totalMemoryDistributed = 0;
+	size_t totalMemoryDistributed = 0;
 	int nAlloc = 0;
 	char *str = NULL;
 
