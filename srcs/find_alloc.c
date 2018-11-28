@@ -16,8 +16,6 @@ t_head *findFreeBlock(size_t size, t_map *zone)
 		tmp->status = USED;
 		tmp->size = size;
 		tmp->spaceBeforeNext += tmp->size - size;
-		if (tmp->spaceBeforeNext >= (HEAD_SIZE + 1))
-			create_empty_block(tmp);
 	}
 	return (tmp);
 }

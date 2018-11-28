@@ -14,7 +14,7 @@ int		print_mem(t_map *tmp, char *type)
 		{
 			if (tmp_head->status == USED)
 			{
-				printf("%p - %p : %zu octets\n", tmp_head->mem, tmp_head->mem + tmp_head->size, tmp_head->size);
+				printf("%p - %p : %zu octets\n", tmp_head->mem, tmp_head->mem + tmp_head->size - 1, tmp_head->size);
 				total += tmp_head->size;
 			}
 			tmp_head = tmp_head->next;
