@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sgaudin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/11/29 16:13:46 by sgaudin           #+#    #+#             */
+/*   Updated: 2018/11/29 16:13:48 by sgaudin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 
-void	*create_empty_block(t_head *ptr_head, size_t size)
+void		*create_empty_block(t_head *ptr_head, size_t size)
 {
 	t_head *tmp_next;
 	t_head *new_block;
@@ -8,9 +20,10 @@ void	*create_empty_block(t_head *ptr_head, size_t size)
 	ptr_head->size = size;
 	tmp_next = ptr_head->next;
 	new_block = (t_head *)(ptr_head->mem + ptr_head->size);
-	new_block->size = ptr_head->spaceBeforeNext - HEAD_SIZE;
+	new_block->size = ptr_head->sp_before_n - HEAD_SIZE;
 	new_block->status = FREE;
-	new_block->spaceBeforeNext = ptr_head->spaceBeforeNext - (new_block->size + HEAD_SIZE);
+	new_block->sp_before_n = ptr_head->sp_before_n -
+							(new_block->size + HEAD_SIZE);
 	new_block->mem = new_block + HEAD_SIZE;
 	new_block->next = tmp_next;
 	ptr_head->next = new_block;
@@ -37,17 +50,17 @@ void		*merge_blocks(t_head *ptr_head, size_t size)
 	t_head *new;
 	t_head *tmp_next;
 
-	tmp_size = ptr_head->size + ptr_head->spaceBeforeNext +
-				ptr_head->next->size + ptr_head->next->spaceBeforeNext;
+	tmp_size = ptr_head->size + ptr_head->sp_before_n +
+				ptr_head->next->size + ptr_head->next->sp_before_n;
 	ptr_head->size = size;
-	ptr_head->spaceBeforeNext = 0;
+	ptr_head->sp_before_n = 0;
 	tmp_next = ptr_head->next->next;
 	if (((tmp_size - size) + HEAD_SIZE) > HEAD_SIZE)
 	{
 		new = ptr_head->mem + size;
 		new->status = FREE;
 		new->size = tmp_size - size;
-		new->spaceBeforeNext = 0;
+		new->sp_before_n = 0;
 		new->mem = ptr_head->mem + size + HEAD_SIZE;
 		new->next = ptr_head->next->next;
 		ptr_head->next = new;
@@ -60,10 +73,9 @@ void		*merge_blocks(t_head *ptr_head, size_t size)
 
 void		*merge_or_new(t_head *ptr_head, size_t size)
 {
-	
 	if (ptr_head->next && ptr_head->next->status == FREE &&
-		(ptr_head->next->size + ptr_head->next->spaceBeforeNext + 
-			ptr_head->size + ptr_head->spaceBeforeNext) >= size)
+		(ptr_head->next->size + ptr_head->next->sp_before_n +
+			ptr_head->size + ptr_head->sp_before_n) >= size)
 		return (merge_blocks(ptr_head, size));
 	else
 		return (move_alloc(ptr_head->mem, size, ptr_head->size));
@@ -72,11 +84,11 @@ void		*merge_or_new(t_head *ptr_head, size_t size)
 void		*realloc(void *ptr, size_t size)
 {
 	t_head	*ptr_head;
-	t_map 	*z_ptr;
+	t_map	*z_ptr;
 
 	pthread_mutex_lock(&g_mutex);
 	if (!ptr)
-		return (NULL);
+		return (malloc(size));
 	if (size <= 0)
 		return (ptr);
 	ptr_head = ptr - HEAD_SIZE;

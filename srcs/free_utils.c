@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sgaudin <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/11/29 16:13:22 by sgaudin           #+#    #+#             */
+/*   Updated: 2018/11/29 16:13:23 by sgaudin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 
 t_map	*is_large(t_head *ptr_head)
@@ -9,7 +21,7 @@ t_map	*is_large(t_head *ptr_head)
 		return (NULL);
 	while (tmp)
 	{
-		if (tmp->firstHead == ptr_head)
+		if (tmp->first_head == ptr_head)
 			return (tmp);
 		tmp = tmp->next;
 	}
