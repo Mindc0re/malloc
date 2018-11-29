@@ -15,14 +15,12 @@ ifeq ($(HOSTTYPE),)
 endif
 
 NAME				=	libft_malloc_$(HOSTTYPE).so
-# NAME				=	malloc
 
 INCLUDE_DIR			=	./includes/
 
 MALLOC_DIR 			=	./srcs/
 
 C_FLAGS				=	-Wall -Wextra -Werror -fPIC
-# C_FLAGS				=	-Wall -Wextra -Werror
 
 FILES_MALLOC		=	ft_malloc.c malloc_utils.c zones_handling.c show_alloc_mem.c \
 						find_alloc.c ft_free.c free_utils.c ft_realloc.c lib_utils.c \
@@ -33,13 +31,12 @@ BIN_MALLOC			= 	$(FILES_MALLOC:.c=.o)
 
 INCLUDES 	= -I $(INCLUDE_DIR)
 ALL_SRCS 	= $(SRC_MALLOC)
-ALL_BINS 	= $(BIN_MALLOC) 
+ALL_BINS 	= $(BIN_MALLOC)
 
 all: $(NAME)
 
 $(NAME):
 	gcc $(C_FLAGS) $(INCLUDES) $(ALL_SRCS) -c
-	# gcc $(C_FLAGS) $(ALL_BINS) -o $(NAME)
 	gcc $(C_FLAGS) -shared $(ALL_BINS) -o $(NAME)
 	ln -s $(NAME) libft_malloc.so
 	mkdir bin_folder

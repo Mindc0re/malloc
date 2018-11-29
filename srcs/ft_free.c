@@ -84,7 +84,7 @@ void		optimize_free_blocks(t_head *ptr_head)
 	}
 }
 
-void		free(void *ptr)
+void		ft_free(void *ptr)
 {
 	t_head	*ptr_head;
 	t_map	*z_ptr;

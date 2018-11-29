@@ -12,12 +12,11 @@
 
 #include "malloc.h"
 
-void			*malloc(size_t size)
+void			*ft_malloc(size_t size)
 {
 	void		*alloc;
 
 	pthread_mutex_lock(&g_mutex);
-	printf("coucou\n");
 	if (size <= 0)
 		return (NULL);
 	alloc = NULL;

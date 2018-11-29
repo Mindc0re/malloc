@@ -67,9 +67,9 @@ typedef struct		s_zones
 t_zones				g_zones;
 pthread_mutex_t		g_mutex;
 
-void				*malloc(size_t size);
-void				free(void *ptr);
-void				*realloc(void *ptr, size_t size);
+void				*ft_malloc(size_t size);
+void				ft_free(void *ptr);
+void				*ft_realloc(void *ptr, size_t size);
 void				show_alloc_mem(void);
 
 void				*alloc_large_zone(size_t size);
