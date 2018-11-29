@@ -4,6 +4,7 @@
 # include <unistd.h>
 # include <sys/mman.h>
 # include <stdlib.h>
+# include <pthread.h>
 
 # include <stdio.h>
 
@@ -52,10 +53,11 @@ typedef struct 		s_zones
 }					t_zones;
 
 t_zones				g_zones;
+pthread_mutex_t		g_mutex;
 
-void 				*ft_malloc(size_t size);
-void				ft_free(void *ptr);
-void				*ft_realloc(void *ptr, size_t size);
+void 				*malloc(size_t size);
+void				free(void *ptr);
+void				*realloc(void *ptr, size_t size);
 void				show_alloc_mem();
 
 int					initZones(void);

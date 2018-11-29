@@ -30,6 +30,7 @@ void	show_alloc_mem()
 	t_map *tmp;
 	int total;
 
+	pthread_mutex_lock(&g_mutex);
 	tmp = NULL;
 	total = 0;
 	tmp = g_zones.tiny;
@@ -44,4 +45,5 @@ void	show_alloc_mem()
 		total += print_mem(tmp, "LARGE");
 
 	printf("Total : %d octets\n\n", total);
+	pthread_mutex_unlock(&g_mutex);
 }

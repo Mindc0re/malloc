@@ -1,10 +1,11 @@
 #include "malloc.h"
 
 // TODO : Checker getrlimit() pour limiter l'appel a malloc si trop de memoire a ete allouee
-void	*ft_malloc(size_t size)
+void	*malloc(size_t size)
 {
 	void 		*alloc;
 
+	pthread_mutex_lock(&g_mutex);
 	if (size <= 0)
 		return (NULL);
 	alloc = NULL;
@@ -22,5 +23,6 @@ void	*ft_malloc(size_t size)
 			pushbackMem(0, TINY, &g_zones.tiny);
 		alloc = zoneParser(g_zones.tiny, size);
 	}
+	pthread_mutex_unlock(&g_mutex);
 	return alloc;
 }

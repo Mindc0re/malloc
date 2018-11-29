@@ -1,39 +1,31 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: dvirgile <dvirgile@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/02/24 18:13:29 by dvirgile          #+#    #+#              #
-#    Updated: 2017/02/24 18:20:39 by dvirgile         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
 
-NAME				=	malloc
+NAME				=	libft_malloc_$(HOSTTYPE).so
 
-INCLUDE_DIR			=	./includes
+INCLUDE_DIR			=	./includes/
 
 MALLOC_DIR 			=	./srcs/
 
-COMPILER			=	gcc
-C_FLAGS				=	-Wall -Wextra -Werror
+C_FLAGS				=	-Wall -Wextra -Werror -fPIC
 
 FILES_MALLOC		=	ft_malloc.c malloc_utils.c zones_handling.c show_alloc_mem.c \
-						find_alloc.c ft_free.c free_utils.c ft_realloc.c lib_utils.c main.c
+						find_alloc.c ft_free.c free_utils.c ft_realloc.c lib_utils.c
 
 SRC_MALLOC			=	$(addprefix $(MALLOC_DIR), $(FILES_MALLOC))
 BIN_MALLOC			= 	$(FILES_MALLOC:.c=.o)
 
-INCLUDES 	= -I$(INCLUDE_DIR)
+INCLUDES 	= -I $(INCLUDE_DIR)
 ALL_SRCS 	= $(SRC_MALLOC)
-ALL_BINS 	= $(BIN_MALLOC)
+ALL_BINS 	= $(BIN_MALLOC) 
 
 all: $(NAME)
 
 $(NAME):
-	gcc $(C_FLAGS) -g $(INCLUDES) $(ALL_SRCS) -c
-	gcc $(C_FLAGS) -g $(ALL_BINS) -o $(NAME)
+	gcc $(C_FLAGS) $(INCLUDES) $(ALL_SRCS) -c
+	gcc $(C_FLAGS) -shared $(ALL_BINS) -o $(NAME)
+	ln -s $(NAME) libft_malloc.so
 	mkdir bin_folder
 	mv $(ALL_BINS) bin_folder
 
@@ -41,6 +33,6 @@ clean:
 	rm -rf bin_folder
 
 fclean: clean
-	rm -rf $(NAME)
+	rm -rf $(NAME) libft_malloc.so
 
 re: fclean all

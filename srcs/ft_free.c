@@ -68,11 +68,12 @@ void		optimize_free_blocks(t_head *ptr_head)
 }
 
 // TODO : Doit-on remettre à 0 un block FREE ? Ou sa "mem" doit-elle pointer sur NULL ? A voir.
-void		ft_free(void *ptr)
+void		free(void *ptr)
 {
 	t_head	*ptr_head;
 	t_map	*z_ptr;
 	
+	pthread_mutex_lock(&g_mutex);
 	if (!ptr)
 		return ;
 	ptr_head = ptr - HEAD_SIZE;
@@ -88,4 +89,5 @@ void		ft_free(void *ptr)
 	z_ptr->availableSpace += ptr_head->size;
 	if (!unmap_zone(z_ptr, z_ptr->type == SMALL ? SMALL_ZONE : TINY_ZONE))
 		optimize_free_blocks(ptr_head);
+	pthread_mutex_unlock(&g_mutex);
 }
