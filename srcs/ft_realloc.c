@@ -36,11 +36,11 @@ void		*move_alloc(void *ptr, size_t asked_size, size_t ptr_size)
 	size_t	cpy_size;
 
 	cpy_size = asked_size > ptr_size ? ptr_size : asked_size;
-	new_ptr = ft_malloc(asked_size);
+	new_ptr = malloc(asked_size);
 	if (!new_ptr)
 		return (NULL);
 	ft_memcpy(new_ptr, ptr, cpy_size);
-	ft_free(ptr);
+	free(ptr);
 	return (new_ptr);
 }
 
@@ -81,14 +81,14 @@ void		*merge_or_new(t_head *ptr_head, size_t size)
 		return (move_alloc(ptr_head->mem, size, ptr_head->size));
 }
 
-void		*ft_realloc(void *ptr, size_t size)
+void		*realloc(void *ptr, size_t size)
 {
 	t_head	*ptr_head;
 	t_map	*z_ptr;
 
 	pthread_mutex_lock(&g_mutex);
 	if (!ptr)
-		return (ft_malloc(size));
+		return (malloc(size));
 	if (size <= 0)
 		return (ptr);
 	ptr_head = ptr - HEAD_SIZE;

@@ -12,7 +12,7 @@
 
 #include "malloc.h"
 
-void			*ft_malloc(size_t size)
+void			*malloc(size_t size)
 {
 	void		*alloc;
 
