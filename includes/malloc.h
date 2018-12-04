@@ -81,7 +81,7 @@ void				*ft_memcpy(void *dst, void *src, size_t n);
 void				ft_putchar(char c);
 void				ft_putstr(char const *s);
 void				ft_putnbr(uintmax_t n);
-void				ft_put_adress(uintmax_t n);
+void				ft_put_address(uintmax_t n);
 size_t				ft_strlen(const char *s);
 
 #endif

@@ -1,4 +1,4 @@
-#include "malloc.h"
+#include "../includes/malloc.h"
 #include <string.h>
 
 void print(char *s) 
@@ -12,7 +12,7 @@ int main()
 
 	addr = malloc(16); 
 	free(NULL); 
-	free((void *)addr + 5); 
+	free((void *)addr + 5);
 	if (realloc((void *)addr + 5, 10) == NULL) 
 		print("Bonjours\n"); 
 } 

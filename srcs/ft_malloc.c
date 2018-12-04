@@ -17,6 +17,7 @@ void			*malloc(size_t size)
 	void		*alloc;
 
 	pthread_mutex_lock(&g_mutex);
+	size = ((size - 1) + 4) - ((size - 1) % 4);
 	if (size <= 0)
 		return (NULL);
 	alloc = NULL;

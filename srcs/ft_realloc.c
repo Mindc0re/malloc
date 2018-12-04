@@ -19,7 +19,7 @@ void		*create_empty_block(t_head *ptr_head, size_t size)
 
 	ptr_head->size = size;
 	tmp_next = ptr_head->next;
-	new_block = (t_head *)(ptr_head->mem + ptr_head->size);
+	new_block = (void *)(&ptr_head->mem + size);
 	new_block->size = ptr_head->sp_before_n - HEAD_SIZE;
 	new_block->status = FREE;
 	new_block->sp_before_n = ptr_head->sp_before_n -
@@ -87,13 +87,16 @@ void		*realloc(void *ptr, size_t size)
 	t_map	*z_ptr;
 
 	pthread_mutex_lock(&g_mutex);
-	if (!ptr)
+	size = ((size - 1) + 4) - ((size - 1) % 4);
+	if (ptr == NULL)
 		return (malloc(size));
 	if (size <= 0)
-		return (ptr);
+	{
+		free(ptr);
+		return (NULL);
+	}
 	ptr_head = ptr - HEAD_SIZE;
-	z_ptr = which_zone(ptr_head);
-	if (!z_ptr)
+	if (!(z_ptr = which_zone(ptr_head)))
 		return (NULL);
 	if (z_ptr->type == LARGE)
 		return (move_alloc(ptr, size, ptr_head->size));

@@ -73,8 +73,15 @@ int			unmap_zone(t_map *zone, size_t map_size)
 void		optimize_free_blocks(t_head *ptr_head)
 {
 	t_head	*next;
+	t_map	*check;
 
 	next = ptr_head->next;
+	if (next)
+	{
+		check = which_zone(next);
+		if (!check)
+			return ;
+	}
 	if (next && next->status == FREE)
 	{
 		ptr_head->size += next->size;

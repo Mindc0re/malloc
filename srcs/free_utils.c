@@ -47,7 +47,7 @@ t_map	*which_zone(t_head *ptr_head)
 	t_map	*tmp;
 	t_map	*ret;
 
-	if (!ptr_head || !ptr_head->mem)
+	if (!ptr_head)
 		return (NULL);
 	if (g_zones.large && (ret = is_large(ptr_head)) != NULL)
 		return (ret);

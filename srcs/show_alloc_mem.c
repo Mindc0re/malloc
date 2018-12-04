@@ -14,9 +14,9 @@
 
 void		p_mem_next(t_head *tmp_head)
 {
-	ft_put_adress((uintmax_t)tmp_head->mem);
+	ft_put_address((uintmax_t)tmp_head->mem);
 	ft_putstr(" - ");
-	ft_put_adress((uintmax_t)tmp_head->mem + tmp_head->size - 1);
+	ft_put_address((uintmax_t)tmp_head->mem + tmp_head->size - 1);
 	ft_putstr(" : ");
 	ft_putnbr(tmp_head->size);
 	ft_putstr(" octets\n");
@@ -34,7 +34,7 @@ int			print_mem(t_map *tmp, char *type)
 		ft_putchar('\n');
 		ft_putstr(type);
 		ft_putstr(" : ");
-		ft_put_adress((uintmax_t)tmp);
+		ft_put_address((uintmax_t)tmp);
 		ft_putchar('\n');
 		while (tmp_head)
 		{

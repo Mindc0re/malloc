@@ -49,7 +49,7 @@ void	ft_putnbr(uintmax_t n)
 	ft_putchar((n % 10) + '0');
 }
 
-void	ft_put_adress(uintmax_t n)
+void	ft_put_address(uintmax_t n)
 {
 	static int	add = 0;
 
@@ -60,7 +60,7 @@ void	ft_put_adress(uintmax_t n)
 	}
 	if (n >= 16)
 	{
-		ft_put_adress(n / 16);
+		ft_put_address(n / 16);
 		add = 1;
 		n %= 16;
 	}
